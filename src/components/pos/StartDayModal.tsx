@@ -74,14 +74,12 @@ const StartDayModal = ({ isOpen, onSuccess, onClose, forceNewSession = false }: 
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => {
-      if (!open && onClose) onClose();
-    }}>
+    <Dialog open={isOpen}>
       <DialogContent 
         className="sm:max-w-md" 
-        hideCloseButton={!onClose}
-        onPointerDownOutside={(e) => { if (!onClose) e.preventDefault(); }}
-        onEscapeKeyDown={(e) => { if (!onClose) e.preventDefault(); }}
+        hideCloseButton={true}
+        onPointerDownOutside={(e) => { e.preventDefault(); }}
+        onEscapeKeyDown={(e) => { e.preventDefault(); }}
         aria-describedby="start-day-description"
       >
         <div className="flex justify-between items-center mb-2">
@@ -95,16 +93,7 @@ const StartDayModal = ({ isOpen, onSuccess, onClose, forceNewSession = false }: 
                 : 'Please enter details to begin the shift.'}
             </DialogDescription>
           </DialogHeader>
-          {onClose && (
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={onClose} 
-              className="h-10 w-10 rounded-full hover:bg-slate-100 transition-colors"
-            >
-              <X className="h-5 w-5 text-slate-400" />
-            </Button>
-          )}
+          {/* No close button to prevent dismissing modal */}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8 mt-8">
