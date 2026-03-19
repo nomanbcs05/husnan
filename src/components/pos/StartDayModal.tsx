@@ -68,11 +68,7 @@ const StartDayModal = ({ isOpen, onSuccess, onClose, forceNewSession = false }: 
       toast.error('Please enter a valid amount');
       return;
     }
-    if (startAmount <= 0) {
-      setAmountError('Amount must be greater than zero');
-      toast.error('Amount must be greater than zero');
-      return;
-    }
+    // Allow zero as valid amount
     setAmountError('');
     startDayMutation.mutate({ amount: startAmount, date });
   };
@@ -137,7 +133,7 @@ const StartDayModal = ({ isOpen, onSuccess, onClose, forceNewSession = false }: 
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
-                min={1}
+                min={0}
                 className="h-14 rounded-2xl border-slate-200 bg-slate-50/50 px-5 font-black text-slate-900 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-xl"
                 aria-invalid={!!amountError}
               />
