@@ -32,10 +32,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   useEffect(() => {
     const role = (typeof window !== 'undefined' && localStorage.getItem('active_role')) || '';
-    // Always show StartDayModal on every login for cashier role if no open register
-    if (!isLoading && openRegister === null && role === 'cashier2') {
-      setForceStartSession(false);
-      setShowStartDayModal(true);
+    const today = new Date().toISOString().slice(0, 10);
+    const startDayShownKey = `start_day_shown_${today}`;
+    // Show StartDayModal on every login of the day for cashier2 and hashirr roles if no open register
+    if (!isLoading && openRegister === null && (role === 'cashier2' || role === 'hashirr')) {
+      if (!sessionStorage.getItem(startDayShownKey)) {
+        setForceStartSession(false);
+        setShowStartDayModal(true);
+        sessionStorage.setItem(startDayShownKey, 'true');
+      }
     } else {
       setForceStartSession(false);
       setShowStartDayModal(false);
