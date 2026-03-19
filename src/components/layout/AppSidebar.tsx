@@ -30,6 +30,9 @@ const AppSidebar = ({ isCollapsed, onToggle }: AppSidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showStartSessionModal, setShowStartSessionModal] = useState(false);
+
+  // Get username from localStorage (set after login)
+  const username = (typeof window !== 'undefined' && localStorage.getItem('pos_local_user')) || '';
   const queryClient = useQueryClient();
 
   const role = (typeof window !== 'undefined' && localStorage.getItem('active_role')) || 'cashier';
@@ -47,7 +50,15 @@ const AppSidebar = ({ isCollapsed, onToggle }: AppSidebarProps) => {
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
+  // Restrict navigation for cashier2 with lock
   if (role === 'cashier2' && cashier2Lock) {
+    navigation = navigation.filter(item =>
+      ['/', '/ongoing-orders', '/orders'].includes(item.href)
+    );
+  }
+
+  // Strictly restrict navigation for user 'hashir' (case-insensitive)
+  if (username.trim().toLowerCase() === 'hashir') {
     navigation = navigation.filter(item =>
       ['/', '/ongoing-orders', '/orders'].includes(item.href)
     );
