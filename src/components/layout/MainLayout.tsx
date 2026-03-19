@@ -32,30 +32,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   useEffect(() => {
     const role = (typeof window !== 'undefined' && localStorage.getItem('active_role')) || '';
-    const today = new Date().toISOString().slice(0, 10);
-    const startDayShownKey = `start_day_shown_${today}`;
-
-    // For Anas (Casher role), show Start Day ON LOGIN only (once per session)
-    if (role === 'cashier2') {
-      const loginFlag = sessionStorage.getItem('anas_start_day_shown');
-      if (!loginFlag) {
-        setShowStartDayModal(true);
-        setForceStartSession(true);
-        sessionStorage.setItem('anas_start_day_shown', 'true');
-        return;
-      }
-    }
-
-    // Only show StartDayModal once per day after end shift
-    if (!isLoading && openRegister === null) {
-      if (!localStorage.getItem(startDayShownKey)) {
-        setForceStartSession(false);
-        setShowStartDayModal(true);
-        localStorage.setItem(startDayShownKey, 'true');
-      } else {
-        setForceStartSession(false);
-        setShowStartDayModal(false);
-      }
+    // Always show StartDayModal on every login for cashier role if no open register
+    if (!isLoading && openRegister === null && role === 'cashier2') {
+      setForceStartSession(false);
+      setShowStartDayModal(true);
     } else {
       setForceStartSession(false);
       setShowStartDayModal(false);
