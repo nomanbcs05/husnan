@@ -34,184 +34,130 @@ const Bill = forwardRef<HTMLDivElement, BillProps>(({ order }, ref) => {
   const address = businessInfo.address;
   const city = businessInfo.city;
   const phone = businessInfo.phone;
-  const billFooter = '!!!!FOR THE LOVE OF FOOD !!!!';
-  const poweredByFooter = 'Powered By: GENAI TECHNOLOGY.';
+  const website = businessInfo.website;
+  const paymentMethodLabel = {
+    cash: 'Cash',
+    card: 'Card',
+    wallet: 'Digital Wallet',
+  };
 
   return (
     <div
       ref={ref}
-      className="receipt-print bg-white text-black p-2 font-mono text-[11px] leading-tight mx-auto"
+      className="receipt-print bg-white text-black p-4 font-mono text-xs mx-auto"
       style={{ width: '80mm' }}
     >
-      {/* Header */}
-      <div className="text-center mb-1">
+      {/* Header Box */}
+      <div className="text-center mb-4 border-2 border-black p-2">
         {!logoError ? (
           <img
             src={logoSrc}
             alt="Logo"
-            className="mx-auto mb-1 object-contain h-16 max-w-[120px] w-auto"
+            className="max-w-[123px] mx-auto mb-1 object-contain"
             onError={() => setLogoError(true)}
           />
         ) : (
-          <div className="border-2 border-dashed border-gray-400 rounded-[50%] w-24 h-16 mx-auto flex items-center justify-center mb-1 transform rotate-[-5deg]">
-            <h1 className="text-lg font-bold italic font-serif">Genai</h1>
-          </div>
+          <div className="text-2xl mb-2">☕</div>
         )}
-      </div>
-
-      {/* Address Box */}
-      <div className="border border-black p-1 text-center mb-1 text-[10px]">
-        <p>{address}</p>
-        <p>{city}</p>
-        {phone && (
-          <>
-            <p className="font-bold">{phone.split(',')[0]}</p>
-            {phone.split(',')[1] && (
-              <p className="font-bold">{phone.split(',')[1]}</p>
-            )}
-          </>
-        )}
-        <p className="text-[9px] mt-1 border-t border-dotted border-black pt-1">
-          Designed & Developed By Genai Tech
-        </p>
-      </div>
-
-      {/* Order Number Box */}
-        <div className="border-x border-t border-black p-1 text-center">
-        <div className="text-2xl font-bold">{order.orderNumber}</div>
-      </div>
-
-      {/* Info Section */}
-      <div className="border border-black p-1 text-[10px]">
-        <div className="flex justify-between">
-          <span>Invoice #:</span>
-          <span className="font-bold">{order.orderNumber}</span>
-          <span>DAY-00{order.orderNumber}</span>
+        <div className="text-[15px] leading-tight font-bold">
+          <p>{address}</p>
+          <p>{city}</p>
+          {phone && <p>{phone}</p>}
         </div>
-        <div className="flex justify-between mt-1">
+        <div className="border-t border-dotted border-black my-1" />
+        <p className="text-[13px] uppercase font-bold">Designed & Developed By Genai Tech</p>
+      </div>
+
+      {/* Large Token / Order Number Box */}
+      <div className="text-center mb-4 border-2 border-black py-2">
+        <h2 className="text-4xl font-bold">{order.orderNumber}</h2>
+      </div>
+
+      {/* Order Info Section */}
+      <div className="mb-3 text-[14px] space-y-1">
+        <div className="flex justify-between items-end">
+          <div className="flex gap-2">
+            <span>Invoice #:</span>
+            <span className="font-bold">{order.orderNumber}</span>
+          </div>
+          <span className="font-bold text-right">DAY-0002</span>
+        </div>
+        <div className="flex justify-between items-center py-1">
           <span>Restaurant:</span>
-          <span className="font-bold uppercase">{name}</span>
+          <span className="text-[22px] font-bold uppercase text-right leading-none">{name}</span>
         </div>
-        <div className="flex justify-between mt-1">
-          <span className="font-bold">Cashier:</span>
-          <span className="font-bold uppercase">{order.cashierName}</span>
+        <div className="flex justify-between">
+          <span>Cashier:</span>
+          <span>{order.cashierName}</span>
         </div>
-        <div className="flex justify-between mt-1">
+        <div className="flex justify-between">
           <span>Type:</span>
-          <span className="uppercase">{order.orderType}</span>
+          <span className="font-bold uppercase">{order.orderType?.replace('_', ' ') || 'DINE IN'}</span>
         </div>
-        <div className="flex justify-between mt-1">
-          <span>{format(order.createdAt, 'd-MMM-yy')}</span>
-          <span>{format(order.createdAt, 'h:mm a')}</span>
+        <div className="flex justify-between">
+          <span>{format(order.createdAt, 'dd-MMM-yy')}</span>
+          <span className="text-right">{format(order.createdAt, 'h:mm a')}</span>
         </div>
-
-        {order.serverName && (
-          <div className="flex justify-between mt-1 border-t border-dotted border-black pt-1">
-            <span className="font-bold">Server:</span>
-            <span className="font-bold uppercase">{order.serverName.replace(/^\[.*?\]\s*/, '')}</span>
-          </div>
-        )}
-
-        {order.tableId && (
-          <div className="flex justify-between mt-1">
-            <span className="font-bold">Table:</span>
-            <span className="font-bold uppercase">{order.tableId}</span>
-          </div>
-        )}
-
-        {order.rider && (
-          <div className="flex justify-between items-center mt-1">
-            <span className="font-bold text-lg">Rider :</span>
-            <span className="font-bold text-lg uppercase">{order.rider.name}</span>
-          </div>
-        )}
-
-        {order.customer && (
-          <div className="mt-1">
-            <div className="flex justify-between">
-              <span>Customer :</span>
-              <span>{order.customer.name}</span>
-            </div>
-            {order.customer.phone && (
-              <div className="flex justify-between">
-                <span>PH#:</span>
-                <span>{order.customer.phone}</span>
-              </div>
-            )}
-            {order.customerAddress && (
-              <div className="flex justify-between mt-0.5">
-                <span className="font-bold">Address:</span>
-                <span className="text-[10px] text-right break-words max-w-[180px] uppercase">
-                  {order.customerAddress}
-                </span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {!order.customer && order.customerAddress && (
-          <div className="flex justify-between mt-1">
-            <span className="font-bold">Address:</span>
-            <span className="text-[10px] text-right break-words max-w-[180px] uppercase">
-              {order.customerAddress}
-            </span>
-          </div>
-        )}
       </div>
+
+      {/* Divider */}
+      <div className="border-t border-black mb-2" />
 
       {/* Items Table */}
-      <div className="border-x border-b border-black">
-        <table className="w-full table-fixed text-[10px]">
-          <thead>
-            <tr className="border-b border-black bg-gray-100">
-              <th className="text-left py-1 pl-1 w-8">Qty</th>
-              <th className="text-left py-1">Item</th>
-              <th className="text-right py-1 w-12">Rate</th>
-              <th className="text-right py-1 pr-1 w-14">Amount</th>
+      <table className="w-full text-[14px]">
+        <thead>
+          <tr className="border-b border-black">
+            <th className="text-left py-1 font-bold">Qty</th>
+            <th className="text-left py-1 font-bold pl-2">Item</th>
+            <th className="text-right py-1 font-bold">Rate</th>
+            <th className="text-right py-1 font-bold">Amount</th>
+          </tr>
+        </thead>
+        <tbody className="font-bold">
+          {order.items.map((item) => (
+            <tr key={item.product.id}>
+              <td className="py-1 text-left">{item.quantity}</td>
+              <td className="py-1 pl-2 text-left uppercase">{item.product.name}</td>
+              <td className="text-right py-1">{item.product.price}</td>
+              <td className="text-right py-1">{item.lineTotal}</td>
             </tr>
-          </thead>
-          <tbody>
-            {order.items.map((item) => (
-              <tr key={item.product.id}>
-                <td className="py-1 pl-1 align-top">{item.quantity}</td>
-                <td className="py-1 align-top uppercase break-words">
-                  {item.product.name}
-                  {/* Modifiers could go here */}
-                </td>
-                <td className="text-right py-1 align-top font-bold">{Number(item.product.price).toLocaleString()}</td>
-                <td className="text-right py-1 pr-1 align-top font-bold">{Number(item.lineTotal).toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
-      {/* Totals */}
-      <div className="border-x border-b border-black p-1 text-[11px]">
+      {/* Totals Section */}
+      <div className="mt-2 space-y-1 text-[14px]">
         <div className="flex justify-between">
           <span>SubTotal :</span>
-          <span className="font-bold">{Number(order.subtotal).toLocaleString()}</span>
+          <span className="font-bold">{order.subtotal}</span>
         </div>
-        {order.deliveryFee && order.deliveryFee > 0 && (
+        <div className="flex justify-between bg-gray-100 p-1 font-bold text-[20px]">
+          <span>Net Bill :</span>
+          <span>{order.total}</span>
+        </div>
+        {order.discountAmount > 0 && (
           <div className="flex justify-between">
-            <span>Delivery Charges :</span>
-            <span className="font-bold">{Number(order.deliveryFee).toLocaleString()}</span>
+            <span>Discount :</span>
+            <span>{order.discountAmount}</span>
           </div>
         )}
-        <div className="flex justify-between font-bold text-base mt-1 bg-gray-100 p-1">
-          <span>Net Bill :</span>
-          <span>{Number(order.total).toLocaleString()}</span>
-        </div>
-        <div className="mt-1">
+        <div className="flex justify-between">
           <span>TIP :</span>
+          <span></span>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="border border-black mt-1 p-2 text-center text-[10px]">
-        <p>{billFooter}</p>
-        <p className="font-bold mt-1">{poweredByFooter}</p>
+      {/* Empty Space before footer */}
+      <div className="my-4" />
+
+      {/* Footer Box */}
+      <div className="text-center border-2 border-black p-2 space-y-1">
+        <p className="text-[14px] font-bold uppercase">!!!!FOR THE LOVE OF FOOD !!!!</p>
+        <p className="text-[13px] font-bold uppercase">Powered By: GENAI TECHNOLOGY  +923342826675.</p>
       </div>
+
+      {/* End marker spacer */}
+      <div className="h-4" />
     </div>
   );
 });
