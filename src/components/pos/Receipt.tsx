@@ -72,7 +72,7 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
 
       {/* Large Token / Order Number Box */}
       <div className="text-center mb-4 border-2 border-black py-2">
-        <h2 className="text-4xl font-bold">{order.orderNumber}</h2>
+        <h2 className="text-[25px] font-bold">{order.orderNumber}</h2>
       </div>
 
       {/* Order Info Section */}
@@ -86,7 +86,7 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
         </div>
         <div className="flex justify-between items-center py-1">
           <span>Restaurant:</span>
-          <span className="text-[22px] font-bold uppercase text-right leading-none">{name}</span>
+          <span className="text-[17px] font-bold uppercase text-right leading-none">{name}</span>
         </div>
         <div className="flex justify-between">
           <span>Cashier:</span>
@@ -153,14 +153,15 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
       <div className="my-4" />
 
       {/* Footer Box */}
-      <div className="text-center border-2 border-black p-2 space-y-1">
-        <p className="text-[14px] font-bold uppercase">!!!!FOR THE LOVE OF FOOD !!!!</p>
-        <p className="text-[13px] font-bold uppercase">Powered By: GENAI TECHNOLOGY  +923342826675.</p>
+      <div className="text-center border-2 border-black p-2">
+        <p className="text-[14px] font-bold uppercase mb-1">!!!!FOR THE LOVE OF FOOD !!!!</p>
+        <p className="text-[11px] font-bold uppercase whitespace-nowrap">Powered By: GENAI TECHNOLOGY +923342826675.</p>
       </div>
 
       {/* End marker spacer */}
       <div className="h-4" />
     </div>
+
   );
 });
 
