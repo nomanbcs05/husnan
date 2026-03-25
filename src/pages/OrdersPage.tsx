@@ -94,6 +94,26 @@ const OrdersPage = () => {
     queryFn: api.orders.getAll,
   });
 
+  const [lastPrintedId, setLastPrintedId] = useState<string | null>(null);
+
+  const handlePrintBill = useReactToPrint({
+    contentRef: billRef,
+    documentTitle: `Bill-${billOrder?.orderNumber || Date.now()}`,
+    onAfterPrint: () => {
+      toast.success('Bill printed successfully');
+      setLastPrintedId(billOrder?.id);
+    },
+  });
+
+  useEffect(() => {
+    if (showViewModal && viewingOrder && billOrder && lastPrintedId !== viewingOrder.id) {
+       const timer = setTimeout(() => {
+         handlePrintBill();
+       }, 800);
+       return () => clearTimeout(timer);
+    }
+  }, [showViewModal, viewingOrder, billOrder, lastPrintedId]);
+
   const handlePrintSummary = useReactToPrint({
     contentRef: summaryRef,
     documentTitle: `Daily-Summary-${format(new Date(), 'yyyy-MM-dd')}`,
@@ -344,10 +364,9 @@ const OrdersPage = () => {
       };
 
       setBillOrder(billData);
-      // Trigger printing immediately in background (hidden div at bottom)
-      setTimeout(() => {
-        handlePrintBill();
-      }, 300);
+      setViewingOrder({ ...fullOrder, dailyId: foundOrder?.dailyId, invoiceNumber: foundOrder?.invoiceNumber });
+      setShowViewModal(true);
+      // Printing is handled by useEffect on showViewModal
     } catch (err) {
       console.error('Error printing bill:', err);
       toast.error('Failed to load order details for bill printing');
@@ -805,11 +824,9 @@ const OrdersPage = () => {
         {/* Order Details Modal */}
         <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
           <DialogContent className="max-w-md overflow-hidden p-0 bg-white">
-            <DialogHeader className="pt-4 px-4 pb-2">
-              <DialogTitle className="flex justify-between items-center text-lg">
-                Order Details
-              </DialogTitle>
-              <DialogDescription className="sr-only">
+            <DialogHeader className="sr-only">
+              <DialogTitle>Order Details</DialogTitle>
+              <DialogDescription>
                 Detailed view of order #{viewingOrder?.dailyId || viewingOrder?.id?.slice(0, 8)}
               </DialogDescription>
             </DialogHeader>
