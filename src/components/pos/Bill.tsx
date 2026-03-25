@@ -47,18 +47,22 @@ const Bill = forwardRef<HTMLDivElement, BillProps>(({ order }, ref) => {
       className="receipt-print bg-white text-black p-4 font-mono text-xs mx-auto"
       style={{ width: '80mm' }}
     >
-      {/* Header Box */}
-      <div className="text-center mb-4 border-2 border-black p-2">
+      {/* Logo Section - Outside Box */}
+      <div className="text-center mb-2">
         {!logoError ? (
           <img
             src={logoSrc}
             alt="Logo"
-            className="max-w-[123px] mx-auto mb-1 object-contain"
+            className="max-w-[123px] mx-auto object-contain"
             onError={() => setLogoError(true)}
           />
         ) : (
-          <div className="text-2xl mb-2">☕</div>
+          <div className="text-2xl mb-1">☕</div>
         )}
+      </div>
+
+      {/* Header Box */}
+      <div className="text-center mb-4 border-2 border-black p-2">
         <div className="text-[15px] leading-tight font-bold">
           <p>{address}</p>
           <p>{city}</p>
