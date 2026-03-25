@@ -55,19 +55,19 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
           <img
             src={logoSrc}
             alt="Logo"
-            className="max-w-[120px] mx-auto mb-1 object-contain"
+            className="max-w-[123px] mx-auto mb-1 object-contain"
             onError={() => setLogoError(true)}
           />
         ) : (
           <div className="text-2xl mb-2">☕</div>
         )}
-        <div className="text-[13px] leading-tight font-bold">
+        <div className="text-[15px] leading-tight font-bold">
           <p>{address}</p>
           <p>{city}</p>
           {phone && <p>{phone}</p>}
         </div>
         <div className="border-t border-dotted border-black my-1" />
-        <p className="text-[11px] uppercase font-bold">Designed & Developed By Genai Tech</p>
+        <p className="text-[13px] uppercase font-bold">Designed & Developed By Genai Tech</p>
       </div>
 
       {/* Large Token / Order Number Box */}
@@ -76,17 +76,17 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
       </div>
 
       {/* Order Info Section */}
-      <div className="mb-3 text-[12px] space-y-1">
+      <div className="mb-3 text-[14px] space-y-1">
         <div className="flex justify-between items-end">
           <div className="flex gap-2">
             <span>Invoice #:</span>
             <span className="font-bold">{order.orderNumber}</span>
           </div>
-          <span className="font-bold text-right">DAY-0001</span>
+          <span className="font-bold text-right">DAY-0002</span>
         </div>
         <div className="flex justify-between items-center py-1">
           <span>Restaurant:</span>
-          <span className="text-[20px] font-bold uppercase text-right leading-none">{name}</span>
+          <span className="text-[22px] font-bold uppercase text-right leading-none">{name}</span>
         </div>
         <div className="flex justify-between">
           <span>Cashier:</span>
@@ -106,7 +106,7 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
       <div className="border-t border-black mb-2" />
 
       {/* Items Table */}
-      <table className="w-full text-[12px]">
+      <table className="w-full text-[14px]">
         <thead>
           <tr className="border-b border-black">
             <th className="text-left py-1 font-bold">Qty</th>
@@ -128,12 +128,12 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
       </table>
 
       {/* Totals Section */}
-      <div className="mt-2 space-y-1 text-[12px]">
+      <div className="mt-2 space-y-1 text-[14px]">
         <div className="flex justify-between">
           <span>SubTotal :</span>
           <span className="font-bold">{order.subtotal}</span>
         </div>
-        <div className="flex justify-between bg-gray-100 p-1 font-bold text-lg">
+        <div className="flex justify-between bg-gray-100 p-1 font-bold text-[20px]">
           <span>Net Bill :</span>
           <span>{order.total}</span>
         </div>
@@ -154,15 +154,13 @@ const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(({ order }, ref) => {
 
       {/* Footer Box */}
       <div className="text-center border-2 border-black p-2 space-y-1">
-        <p className="text-[12px] font-bold uppercase">!!!!FOR THE LOVE OF FOOD !!!!</p>
-        <p className="text-[11px] font-bold uppercase">Powered By: GENAI TECHNOLOGY +923342826675</p>
+        <p className="text-[14px] font-bold uppercase">!!!!FOR THE LOVE OF FOOD !!!!</p>
+        <p className="text-[13px] font-bold uppercase">Powered By: GENAI TECHNOLOGY  +923342826675.</p>
       </div>
 
       {/* End marker spacer */}
       <div className="h-4" />
     </div>
-
-
   );
 });
 
