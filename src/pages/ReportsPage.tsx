@@ -49,7 +49,11 @@ const ReportsPage = () => {
   const todayOrders = useMemo(() => {
     if (!data?.orders) return [];
     const today = startOfDay(new Date());
-    return data.orders.filter(order => order.created_at && isAfter(parseISO(order.created_at), today));
+    return data.orders.filter(order => 
+      order.created_at && 
+      isAfter(parseISO(order.created_at), today) && 
+      order.status === 'completed'
+    );
   }, [data?.orders]);
 
   const stats = useMemo(() => {
@@ -72,12 +76,14 @@ const ReportsPage = () => {
 
     // Filter current period orders
     const currentOrders = data.orders.filter(order => 
-      isAfter(parseISO(order.created_at), startDate)
+      isAfter(parseISO(order.created_at), startDate) && 
+      order.status === 'completed'
     );
 
     // Filter previous period orders (for comparison)
     const previousOrders = data.orders.filter(order => 
-      isWithinInterval(parseISO(order.created_at), { start: previousStartDate, end: previousEndDate })
+      isWithinInterval(parseISO(order.created_at), { start: previousStartDate, end: previousEndDate }) && 
+      order.status === 'completed'
     );
 
     // Calculate metrics

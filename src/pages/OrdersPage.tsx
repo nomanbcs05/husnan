@@ -344,8 +344,10 @@ const OrdersPage = () => {
       };
 
       setBillOrder(billData);
-      setShowBill(true);
-      // Printing will only be triggered by the Print button now
+      // Trigger printing immediately in background (hidden div at bottom)
+      setTimeout(() => {
+        handlePrintBill();
+      }, 300);
     } catch (err) {
       console.error('Error printing bill:', err);
       toast.error('Failed to load order details for bill printing');
@@ -389,6 +391,24 @@ const OrdersPage = () => {
       toast.error(`Failed to clear history: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   });
+  
+  const refundOrderMutation = useMutation({
+    mutationFn: (orderId: string) => api.orders.updateStatus(orderId, 'refunded'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      toast.success("Order refunded successfully");
+    },
+    onError: (error) => {
+      toast.error(`Failed to refund order: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  });
+
+  const handleRefundOrder = (orderId: string) => {
+    if (!ordersActionsPasswordGate()) return;
+    if (window.confirm("Are you sure you want to refund this order? This will mark it as refunded and update reports.")) {
+      refundOrderMutation.mutate(orderId);
+    }
+  };
 
   if (isError) {
     return (
@@ -723,7 +743,10 @@ const OrdersPage = () => {
                                 Duplicate KOT
                               </DropdownMenuItem>
                               {order.status === 'completed' && (
-                                <DropdownMenuItem className="text-destructive">
+                                <DropdownMenuItem 
+                                  className="text-destructive font-bold cursor-pointer"
+                                  onClick={() => handleRefundOrder(order.id)}
+                                >
                                   <RotateCcw className="h-4 w-4 mr-2" />
                                   Refund Order
                                 </DropdownMenuItem>

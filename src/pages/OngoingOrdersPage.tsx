@@ -384,12 +384,12 @@ const OngoingOrdersPage = () => {
   };
 
   useEffect(() => {
-    if (showBill && billOrder) {
+    if (billOrder) {
       setTimeout(() => {
         handlePrintBill();
       }, 500);
     }
-  }, [showBill, billOrder]);
+  }, [billOrder]);
 
   const filteredOrders = useMemo(() => {
     // Sort all orders today to calculate consistent daily IDs
@@ -867,7 +867,7 @@ const OngoingOrdersPage = () => {
                           } else {
                             const billData = prepareBillData(selectedOrder);
                             setBillOrder(billData);
-                            setShowBill(true);
+                            // Direct print triggered by useEffect on billOrder
                           }
                         }}
                       >
@@ -920,27 +920,7 @@ const OngoingOrdersPage = () => {
       />
 
       {/* Bill Dialog */}
-      <Dialog open={showBill} onOpenChange={setShowBill}>
-        <DialogContent className="max-w-md" aria-describedby="ongoing-bill-description">
-          <DialogHeader>
-            <DialogTitle>Bill Preview</DialogTitle>
-            <DialogDescription id="ongoing-bill-description" className="sr-only">Bill for current order</DialogDescription>
-          </DialogHeader>
-          <div className="max-h-[80vh] overflow-auto">
-            {billOrder && (
-              <Bill order={billOrder} />
-            )}
-          </div>
-          <div className="flex gap-3 mt-4">
-            <Button variant="outline" className="flex-1" onClick={() => setShowBill(false)}>
-              Close
-            </Button>
-            <Button className="flex-1" onClick={() => handlePrintBill()}>
-              Print Bill
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Bill Dialog Removed for Direct Printing */}
     </MainLayout>
   );
 };
