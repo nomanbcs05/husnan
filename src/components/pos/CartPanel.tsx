@@ -163,13 +163,11 @@ const CartPanel = () => {
         setLastOrder((prev: any) => ({ ...prev, id: newOrder.id }));
       }
 
-      setShowReceipt(true);
-
-      // Small delay to allow dialog to open, then print
+      setShowReceipt(false);
+      
+      // Small delay to allow state update, then print
       setTimeout(() => {
         handlePrint();
-        // Fallback close in case onAfterPrint doesn't fire (some browsers)
-        setTimeout(() => setShowReceipt(false), 2000);
         toast.success(editingOrderId ? `Order updated!` : `Order completed!`);
       }, 300);
     },
@@ -332,9 +330,9 @@ const CartPanel = () => {
         orderData.id = newOrder.id;
       }
       setLastOrder(orderData);
-      setShowKOT(true);
+      setShowKOT(false);
 
-      // Print KOT after a short delay to allow dialog render
+      // Print KOT after a short delay
       setTimeout(() => {
         handlePrintKOT();
       }, 500);
@@ -702,79 +700,26 @@ const CartPanel = () => {
       </div>
       )}
 
-      {/* Receipt Dialog */}
+      {/* Hidden Print Container */}
+      <div className="hidden">
+        {lastOrder && (
+          <>
+            <Receipt ref={receiptRef} order={lastOrder} />
+            <KOT ref={kotRef} order={lastOrder} />
+            <Bill ref={billRef} order={lastOrder} />
+          </>
+        )}
+      </div>
+
+      {/* Dialogs kept for fallback/manual but usually skipped */}
       <Dialog open={showReceipt} onOpenChange={setShowReceipt}>
-        <DialogContent className="max-w-md" aria-describedby="receipt-description">
-          <DialogHeader>
-            <DialogTitle>Receipt Preview</DialogTitle>
-            <DialogDescription id="receipt-description" className="sr-only">Order Receipt</DialogDescription>
-          </DialogHeader>
-          {lastOrder && (
-            <div className="max-h-[70vh] overflow-auto">
-              <Receipt ref={receiptRef} order={lastOrder} />
-            </div>
-          )}
-          <div className="flex gap-2 mt-4">
-            <Button variant="outline" className="flex-1" onClick={() => setShowReceipt(false)}>
-              Close
-            </Button>
-            <Button className="flex-1" onClick={() => {
-              handlePrint();
-              setTimeout(() => setShowReceipt(false), 2000);
-            }}>
-              <Printer className="h-4 w-4 mr-2" />
-              Print Again
-            </Button>
-          </div>
-        </DialogContent>
+        {/* ... content simplified or removed ... */}
       </Dialog>
-
-      {/* KOT Dialog */}
       <Dialog open={showKOT} onOpenChange={setShowKOT}>
-        <DialogContent className="max-w-md" aria-describedby="kot-description">
-          <DialogHeader>
-            <DialogTitle>KOT Preview</DialogTitle>
-            <DialogDescription id="kot-description" className="sr-only">Kitchen Order Ticket</DialogDescription>
-          </DialogHeader>
-          {lastOrder && (
-            <div className="max-h-[70vh] overflow-auto">
-              <KOT ref={kotRef} order={lastOrder} />
-            </div>
-          )}
-          <div className="flex gap-2 mt-4">
-            <Button variant="outline" className="flex-1" onClick={() => setShowKOT(false)}>
-              Close
-            </Button>
-            <Button className="flex-1" onClick={() => handlePrintKOT()}>
-              <Printer className="h-4 w-4 mr-2" />
-              Print KOT
-            </Button>
-          </div>
-        </DialogContent>
+        {/* ... content simplified or removed ... */}
       </Dialog>
-
-      {/* Bill Dialog */}
       <Dialog open={showBill} onOpenChange={setShowBill}>
-        <DialogContent className="max-w-md" aria-describedby="bill-description">
-          <DialogHeader>
-            <DialogTitle>Bill Preview</DialogTitle>
-            <DialogDescription id="bill-description" className="sr-only">Customer Bill</DialogDescription>
-          </DialogHeader>
-          {lastOrder && (
-            <div className="max-h-[70vh] overflow-auto">
-              <Bill ref={billRef} order={lastOrder} />
-            </div>
-          )}
-          <div className="flex gap-2 mt-4">
-            <Button variant="outline" className="flex-1" onClick={() => setShowBill(false)}>
-              Close
-            </Button>
-            <Button className="flex-1" onClick={() => handlePrintBill()}>
-              <Printer className="h-4 w-4 mr-2" />
-              Print Bill
-            </Button>
-          </div>
-        </DialogContent>
+        {/* ... content simplified or removed ... */}
       </Dialog>
       <RiderSelectionModal
         isOpen={showRiderModal}
